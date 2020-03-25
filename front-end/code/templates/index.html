@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% for aZinger in Zingers %}
+    <div class="container {{ loop.cycle('left', 'right') }}">
+    <div class="content">
+    <div class="wrapper">
+      <div class="box a">
+        <h3>{{ aZinger.setup }}</h3>
+        <p>{{ aZinger.body }} </p>
+      </div>
+      <div class="box c">{{ aZinger.votes }}  <img width=25px height=25px src="{{ url_for('static', filename='laugh.jpeg') }}" /></div>
+      <div class="box b">{{ aTag }}</div>
+
+    </div>
+  </div>
+  </div>
+    {% endfor %}
+
+{% endblock %}

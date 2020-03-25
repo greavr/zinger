@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>POST: <a href="/api/v1/add">/api/v1/add</a></h2>
+<b>Required Fields:</b>
+<ul>
+  <li><b>setup</b> : setup for the joke
+  <li><b>body</b> : body of the joke
+  <li><b>poster</b> : user_id of the poster
+</ul>
+<b>Optional Fields:</b>
+<ul>
+  <li><b>tags</b> : SemiColon seperated array of tags, e.g. NSFW, dark, animal
+</ul>
+<hr />
+
+<h2>POST / GET: <a href="/api/v1/vote">/api/v1/vote</a></h2>
+<b>Required Fields:</b>
+<ul>
+  <li><b>zinger_id</b> : zinger_id
+  <li><b>voter</b> : user id of voter <b>(Required for POST)</b>
+</ul>
+<b>POST</b> Increments the votes by 1<br />
+<b>GET</b> Returns Current Vote Amount
+<hr />
+
+<h2>POST: <a href="/api/v1/update">/api/v1/update</a></h2>
+<b>Required Fields:</b>
+<ul>
+  <li><b>zinger_id</b> : zinger_id
+  <li><b>body</b> : body of the joke
+  <li><b>setup</b> : setup for the joke
+</ul>
+<b>Optional Fields:</b>
+<ul>
+  <li><b>tags</b> : SemiColon seperated array of tags, e.g. NSFW;dark;animal
+</ul>
+<hr />
+
+<h2>GET: <a href="/api/v1/list">/api/v1/list</a></h2>
+Return the list of top <i>N</i>, zingers based on the # of votes.<br />
+<b>Required Fields:</b>
+<ul>
+  <li>N/A
+</ul>
+<b>Optional Fields:</b>
+<ul>
+  <li><b>count</b> : how many to return  (default 10)
+  <li><b>page</b> : Which page of results to return
+  <li><b>tag</b> : single tag used to return list of zingers with that SINGLE tag
+</ul>
+<hr />
+
+<h2>POST: <a href="/api/v1/remove">/api/v1/remove</a></h2>
+Mark the zinger as inactive.
+<b>Required Fields:</b>
+<ul>
+  <li><b>zinger_id</b> : zinger_id
+</ul>
+<b>Optional Fields:</b>
+<ul>
+  <li>N/A
+</ul>
+<hr />
+
+{% endblock %}

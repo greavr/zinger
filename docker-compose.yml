@@ -1,0 +1,14 @@
+version: '3'
+services:
+  backend:
+    build: backend/.
+    environment:
+      - redishost=redis
+      - redisport=6379
+      - redisdb=zingers
+      - FLASK_APP=index.py
+      - gcp_project=ricks-sandbox
+    ports:
+      - "5000:5000"
+  redis:
+    image: "redis:alpine"

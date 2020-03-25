@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='mystyle.css') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+  <div id="header">
+    <h1>Zingers</h1>
+  </div>
+  <div class="timeline">
+    {% block content %}
+
+    {% endblock %}
+  </div>
+  <div class="addjoke-container">
+    <div class="addjoke header"><h3>Add Joke<h3></div>
+    <div class="addjoke sidebar"><h4>Tags</h4></div>
+    <div class="addjoke content"><h4>Joke></h4>
+      Title: <br />
+      Body:
+    </div>
+    <div class="addjoke footer">Submit</div>
+  </div>
+
+</body>
+</html>
