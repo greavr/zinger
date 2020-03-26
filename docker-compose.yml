@@ -12,3 +12,11 @@ services:
       - "5000:5000"
   redis:
     image: "redis:alpine"
+  frontend:
+    build: front-end/.
+    environment:
+      - FLASK_APP=index.py
+      - gcp_project=ricks-sandbox
+    ports:
+      - "8080:8080"
+

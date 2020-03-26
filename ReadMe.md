@@ -21,3 +21,5 @@ export redisdb="zingers"
 export gcp_project="ricks-sandbox"
 
 export redishost="$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' some-redis)"
+
+#### Docker compose
