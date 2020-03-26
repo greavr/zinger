@@ -1,4 +1,5 @@
 ### Python
+python3 -m venv env
 source env/bin/activate
 pip3 install -r requirements.txt
 export FLASK_APP=index.py
@@ -23,3 +24,17 @@ export gcp_project="ricks-sandbox"
 export redishost="$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' some-redis)"
 
 #### Docker compose
+docker-compose build
+docker-compose -d up
+
+
+#### GCP Profiler Service account
+gcloud iam service-accounts create zinger-stackdriver-sa --display-name "Stackdriver Profiler Service Account"
+
+gcloud projects add-iam-policy-binding ricks-sandbox \
+    --member serviceAccount:zinger-stackdriver-sa@ricks-sandbox.iam.gserviceaccount.com \
+    --role roles/cloudprofiler.agent
+
+gcloud iam service-accounts keys create \
+     ~/key.json \
+     --iam-account zinger-stackdriver-sa@ricks-sandbox.iam.gserviceaccount.com

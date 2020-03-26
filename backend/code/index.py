@@ -7,14 +7,6 @@ import random
 import googlecloudprofiler
 
 """
-#############################
-# Google Cloud Debugger
-try:
-    import googleclouddebugger
-    googleclouddebugger.enable()
-except ImportError:
-    pass
-
 # Google Cloud Trace
 from opencensus.ext.stackdriver import trace_exporter as stackdriver_exporter
 import opencensus.trace.tracer
@@ -26,9 +18,14 @@ redisHost = os.getenv('redishost')
 redisPort = os.getenv('redisport')
 gcp_projectid = os.getenv('gcp_project')
 
+# Check Environment settings
+if os.getenv('GOOGLE_APPLICATION_CREDENTIALS') is None:
+    # Rick Environment specific for now
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/home/rgreaves/key.json"
+     
+
 # Debug settings
 print ("Node: {0}, Redis Host: {1} , Redis Port: {2}".format(os.uname()[1], redisHost, redisPort))
-profiler=False
 
 r = redis.StrictRedis(charset="utf-8", decode_responses=True, socket_timeout=2,
     host=redisHost,
@@ -42,6 +39,13 @@ app.config.from_object(__name__)
 # Custom Functions
 def GetCount():
     return len(r.keys())
+
+def start_debugger():
+    try:
+        import googleclouddebugger
+        googleclouddebugger.enable()
+    except ImportError:
+        pass
 
 def start_profiler():
     # Profiler initialization. It starts a daemon thread which continuously
@@ -301,8 +305,11 @@ def get_zingers(conn, page, count, tag='score:'):
     #Get the article information from the list of article ids.
     return articles
 
-
+# Start Google Services
+start_debugger()
+start_profiler()
 
 if __name__ == "__main__":
-    #start_profiler()
+    start_profiler()
+    start_debugger()
     app.run(host='0.0.0.0')
