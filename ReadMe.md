@@ -9,7 +9,12 @@ python3 -m flask run
 deactivate
 
 
+### Run without GCP APM
 docker build -t back-end . && docker run --name backy -d -p 5000:5000 back-end
+docker rm -f backy
+
+### Run with GCP APM
+docker rm -f backy && docker build -t back-end . && docker run --name backy -d -p 5000:5000 -e "gcp_project=ricks-sandbox" -e "GOOGLE_APPLICATION_CREDENTIALS=home/rgreaves/key.json" -v /home/rgreaves:/home/rgreaves back-end
 docker rm -f backy
 
 #### REDIS
@@ -33,7 +38,11 @@ gcloud iam service-accounts create zinger-stackdriver-sa --display-name "Stackdr
 
 gcloud projects add-iam-policy-binding ricks-sandbox \
     --member serviceAccount:zinger-stackdriver-sa@ricks-sandbox.iam.gserviceaccount.com \
-    --role roles/cloudprofiler.agent
+    --role roles/cloudprofiler.agent 
+
+gcloud projects add-iam-policy-binding ricks-sandbox \
+    --member serviceAccount:zinger-stackdriver-sa@ricks-sandbox.iam.gserviceaccount.com \
+    --role roles/clouddebugger.agent
 
 gcloud iam service-accounts keys create \
      ~/key.json \

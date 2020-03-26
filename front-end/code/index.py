@@ -23,26 +23,32 @@ backend="http://0.0.0.0:5000/"
 
 ##############
 # Custom Functions
+def start_debugger():
+    try:
+        import googleclouddebugger
+        googleclouddebugger.enable()
+    except ImportError:
+        pass
+
 def start_profiler():
     # Profiler initialization. It starts a daemon thread which continuously
     # collects and uploads profiles. Best done as early as possible.
     try:
         googlecloudprofiler.start(
-            service='zinger-front-end',
+            service='zinger-backend',
             service_version='1.0.1',
             # verbose is the logging level. 0-error, 1-warning, 2-info,
             # 3-debug. It defaults to 0 (error) if not set.
             verbose=3,
             # project_id must be set if not running on GCP.
-            project_id=gcp_projectid,
+            project_id=os.getenv('gcp_project'),
         )
-        print ("Profiler started for " + gcp_projectid)
+        print ("Profiler started for " + os.getenv('gcp_project'))
         profiler=True
     except (ValueError, NotImplementedError) as exc:
         print(exc)  # Handle errors here
         print("failed")
-
-
+        
 # Function to test connection to back end
 def testBackend():
     try:
@@ -175,5 +181,13 @@ def task(id):
 
 
 if __name__ == "__main__":
-    start_profiler()
+     # Start Google Services if flagged
+    if os.getenv('gcp_project') is not None and os.getenv('GOOGLE_APPLICATION_CREDENTIALS') is not None:
+        print ("Starting Google Services")
+        # Start Service
+        start_profiler()
+        start_debugger()
+    else:
+        print ("Missing env settings: [ {0} ],[ {1} ]", os.getenv('gcp_project'), os.getenv('GOOGLE_APPLICATION_CREDENTIALS'))
+
     app.run(host='0.0.0.0', port=8080)

@@ -16,13 +16,7 @@ import opencensus.trace.tracer
 # Redis Env
 redisHost = os.getenv('redishost')
 redisPort = os.getenv('redisport')
-gcp_projectid = os.getenv('gcp_project')
-
-# Check Environment settings
-if os.getenv('GOOGLE_APPLICATION_CREDENTIALS') is None:
-    # Rick Environment specific for now
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/home/rgreaves/key.json"
-     
+   
 
 # Debug settings
 print ("Node: {0}, Redis Host: {1} , Redis Port: {2}".format(os.uname()[1], redisHost, redisPort))
@@ -58,9 +52,9 @@ def start_profiler():
             # 3-debug. It defaults to 0 (error) if not set.
             verbose=3,
             # project_id must be set if not running on GCP.
-            project_id=gcp_projectid,
+            project_id=os.getenv('gcp_project'),
         )
-        print ("Profiler started for " + gcp_projectid)
+        print ("Profiler started for " + os.getenv('gcp_project'))
         profiler=True
     except (ValueError, NotImplementedError) as exc:
         print(exc)  # Handle errors here
@@ -305,11 +299,14 @@ def get_zingers(conn, page, count, tag='score:'):
     #Get the article information from the list of article ids.
     return articles
 
-# Start Google Services
-start_debugger()
-start_profiler()
-
 if __name__ == "__main__":
-    start_profiler()
-    start_debugger()
+    # Start Google Services if flagged
+    if os.getenv('gcp_project') is not None and os.getenv('GOOGLE_APPLICATION_CREDENTIALS') is not None:
+        print ("Starting Google Services")
+        # Start Service
+        start_profiler()
+        start_debugger()
+    else:
+        print ("Missing env settings: [ {0} ],[ {1} ]", os.getenv('gcp_project'), os.getenv('GOOGLE_APPLICATION_CREDENTIALS'))
+
     app.run(host='0.0.0.0')

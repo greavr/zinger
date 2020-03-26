@@ -1,10 +1,11 @@
-FROM debian
+FROM python:3
+#FROM debian
 
 MAINTAINER Rick Greaves "rgreaves@google.com"
 
-RUN apt-get update -y
-RUN apt-get install -y python3-pip python3-dev
-RUN apt-get autoremove -y
+#RUN apt-get update -y
+#RUN apt-get install -y python3-pip python3-dev
+#RUN apt-get autoremove -y
 
 COPY /code /app
 
