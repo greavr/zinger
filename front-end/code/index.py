@@ -6,9 +6,6 @@ import random
 import requests
 import string
 
-# Google Cloud Profiler
-import googlecloudprofiler
-
 #App config
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -33,7 +30,11 @@ def start_debugger():
 def start_profiler():
     # Profiler initialization. It starts a daemon thread which continuously
     # collects and uploads profiles. Best done as early as possible.
+
     try:
+        # Google Cloud Profiler
+        import googlecloudprofiler
+        
         googlecloudprofiler.start(
             service='zinger-backend',
             service_version='1.0.1',
@@ -48,6 +49,21 @@ def start_profiler():
     except (ValueError, NotImplementedError) as exc:
         print(exc)  # Handle errors here
         print("failed")
+
+def start_trace():
+    # Google Cloud Trace
+    from opencensus.ext.stackdriver import trace_exporter as stackdriver_exporter
+    import opencensus.trace.tracer
+
+    exporter = stackdriver_exporter.StackdriverExporter(
+        project_id=os.getenv('gcp_project')
+    )
+    tracer = opencensus.trace.tracer.Tracer(
+        exporter=exporter,
+        sampler=opencensus.trace.tracer.samplers.AlwaysOnSampler()
+    )
+
+    return tracer
         
 # Function to test connection to back end
 def testBackend():
@@ -181,13 +197,14 @@ def task(id):
 
 
 if __name__ == "__main__":
-     # Start Google Services if flagged
+# Start Google Services if flagged
     if os.getenv('gcp_project') is not None and os.getenv('GOOGLE_APPLICATION_CREDENTIALS') is not None:
-        print ("Starting Google Services")
+        print ("Starting Google Services: [ {0} ],[ {1} ]".format(os.getenv('gcp_project'), os.getenv('GOOGLE_APPLICATION_CREDENTIALS')))
         # Start Service
         start_profiler()
         start_debugger()
+        tracer = start_trace()
     else:
-        print ("Missing env settings: [ {0} ],[ {1} ]", os.getenv('gcp_project'), os.getenv('GOOGLE_APPLICATION_CREDENTIALS'))
+        print ("Missing env settings: [ {0} ],[ {1} ]".format(os.getenv('gcp_project'), os.getenv('GOOGLE_APPLICATION_CREDENTIALS')))
 
     app.run(host='0.0.0.0', port=8080)

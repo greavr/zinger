@@ -8,8 +8,11 @@ services:
       - redisdb=zingers
       - FLASK_APP=index.py
       - gcp_project=ricks-sandbox
+      - GOOGLE_APPLICATION_CREDENTIALS=/home/rgreaves/key.json
     ports:
       - "5000:5000"
+    volumes:
+      - /home/rgreaves:/home/rgreaves
   redis:
     image: "redis:alpine"
   frontend:

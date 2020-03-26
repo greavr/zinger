@@ -1,4 +1,6 @@
 flask
 redis
 google-cloud-profiler
-google-python-cloud-debugger
+opencensus.ext.stackdriver
+grpcio
+grpcio-tools
