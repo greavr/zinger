@@ -19,14 +19,7 @@ docker rm -f backy
 
 #### REDIS
 docker run --name some-redis -d -p 7001:6379 redis
-docker rm -f some-redis
-
-export redishost=127.0.0.1
-export redisport=7001
-export redisdb="zingers"
-export gcp_project="ricks-sandbox"
-
-export redishost="$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' some-redis)"
+docker rm -f some-redisxport redishost="$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' some-redis)"
 
 #### Docker compose
 docker-compose build
