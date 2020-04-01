@@ -9,10 +9,15 @@ import config
 app = Flask(__name__)
 app.config.from_object(config.Production)
 
+# Redis Env
+redis_host = os.getenv('redishost', '127.0.0.1')
+redis_port = os.getenv('redisport', '7001')
+# Debug settings
+print ("Node: {0}, Redis Host: {1} , Redis Port: {2}".format(os.uname()[1], redis_host, redis_port))
+
 r = redis.StrictRedis(charset="utf-8", decode_responses=True, socket_timeout=2,
-    host=app.config.get("redis_host"),
-    port=app.config.get("redis_port"),
-    db=app.config.get("redis_db"))
+    host=redis_host, 
+    port=redis_port)
 
 
 #GCP Profiler Enabled
@@ -80,16 +85,20 @@ def health():
 # Kubernetes readiness check
 @app.route("/ready", methods=['GET', 'POST'])
 def ready():
-    if profiler:
-        return Response("Happy - Profiler Enabled", status=200, mimetype='text/html')
-    else:
-        return Response("Happy - No Profiler", status=200, mimetype='text/html')
+    return Response("Happy - Profiler: " + str(profiler), status=200, mimetype='text/html')
+
+
+# Redis Check
+@app.route("/ping", methods=['GET', 'POST'])
+def ping():
+   return Response(str(r.ping()), status=200, mimetype='text/html')
 
 
 # Default, display help page
 @app.route("/", methods=['GET'])
 def default():
     return render_template('default.html')
+
 
 
 
@@ -384,13 +393,13 @@ def get_zingers(conn, page, count, tag='score:'):
 if __name__ == "__main__":
     # Start Google Services if flagged
     if app.config.get("EnableDebugTools"):
-        print ("Starting Google Services: [ {0} ],[ {1} ]".format(os.getenv('gcp_project'), os.getenv('GOOGLE_APPLICATION_CREDENTIALS')))
+        print ("Starting Google Services: [ GCP Project: {0} ],[ App Creds: {1} ]".format(os.getenv('gcp_project'), os.getenv('GOOGLE_APPLICATION_CREDENTIALS')))
         # Start Service
         start_profiler()
         start_debugger()
         tracer = start_trace()
     else:
-        print ("Missing env settings: [ {0} ],[ {1} ]".format(os.getenv('gcp_project'), os.getenv('GOOGLE_APPLICATION_CREDENTIALS')))
+        print ("Missing env settings: [ GCP Project: {0} ],[ App Creds: {1} ]".format(os.getenv('gcp_project'), os.getenv('GOOGLE_APPLICATION_CREDENTIALS')))
 
     ## Run APP
     app.run(host='0.0.0.0')

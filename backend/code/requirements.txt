@@ -1,6 +1,7 @@
-unittest
 coverage
-pytest
+mock
+fakeredis
+pylint
 flask
 redis
 google-cloud-profiler
