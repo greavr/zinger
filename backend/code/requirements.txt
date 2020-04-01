@@ -1,3 +1,6 @@
+unittest
+coverage
+pytest
 flask
 redis
 google-cloud-profiler

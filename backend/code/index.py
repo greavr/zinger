@@ -3,26 +3,23 @@ import os
 import redis
 import datetime
 import random
+import config
 
-# Redis Env
-redisHost = os.getenv('redishost')
-redisPort = os.getenv('redisport')
-   
-# Trace Enabled
-traceEnabled = False
-tracer
-
-# Debug settings
-print ("Node: {0}, Redis Host: {1} , Redis Port: {2}".format(os.uname()[1], redisHost, redisPort))
+## Config App
+app = Flask(__name__)
+app.config.from_object(config.Production)
 
 r = redis.StrictRedis(charset="utf-8", decode_responses=True, socket_timeout=2,
-    host=redisHost,
-    port=redisPort)
+    host=app.config.get("redis_host"),
+    port=app.config.get("redis_port"),
+    db=app.config.get("redis_db"))
 
-# App Config
-app = Flask(__name__)
-app.config.from_object(__name__)
+
+#GCP Profiler Enabled
 profiler=False
+# Trace Enabled
+traceEnabled = False
+tracer=False
 
 ##############
 # Custom Functions
@@ -51,7 +48,7 @@ def start_profiler():
             project_id=os.getenv('gcp_project'),
         )
         print ("Profiler started for " + os.getenv('gcp_project'))
-        profiler=True
+        profiler = True
     except (ValueError, NotImplementedError) as exc:
         print(exc)  # Handle errors here
         print("failed")
@@ -69,7 +66,7 @@ def start_trace():
         exporter=exporter,
         sampler=opencensus.trace.tracer.samplers.AlwaysOnSampler()
     )
-
+    traceEnabled=True
     return tracer
 
 
@@ -78,25 +75,16 @@ def start_trace():
 # Kubernetes health check
 @app.route("/healthz", methods=['GET', 'POST'])
 def health():
-    try:
-        r.ping()
-        return Response("Happy", status=200, mimetype='text/html')
-    except:
-        return Response("Unhappy", status=500, mimetype='text/html')
+    return Response("Happy", status=200, mimetype='text/html')
 
 # Kubernetes readiness check
 @app.route("/ready", methods=['GET', 'POST'])
 def ready():
-    try:
-        r.ping()
-        # Check if profiler is running
-        if profiler:
-            return Response("Happy - Profiler Enabled", status=200, mimetype='text/html')
-        else:
-            return Response("Happy - No Profiler", status=200, mimetype='text/html')
-    except:
-        print ("Not able to connect to redis")
-        return Response("Unhappy", status=500, mimetype='text/html')
+    if profiler:
+        return Response("Happy - Profiler Enabled", status=200, mimetype='text/html')
+    else:
+        return Response("Happy - No Profiler", status=200, mimetype='text/html')
+
 
 # Default, display help page
 @app.route("/", methods=['GET'])
@@ -395,7 +383,7 @@ def get_zingers(conn, page, count, tag='score:'):
 
 if __name__ == "__main__":
     # Start Google Services if flagged
-    if os.getenv('gcp_project') is not None and os.getenv('GOOGLE_APPLICATION_CREDENTIALS') is not None:
+    if app.config.get("EnableDebugTools"):
         print ("Starting Google Services: [ {0} ],[ {1} ]".format(os.getenv('gcp_project'), os.getenv('GOOGLE_APPLICATION_CREDENTIALS')))
         # Start Service
         start_profiler()
@@ -404,4 +392,5 @@ if __name__ == "__main__":
     else:
         print ("Missing env settings: [ {0} ],[ {1} ]".format(os.getenv('gcp_project'), os.getenv('GOOGLE_APPLICATION_CREDENTIALS')))
 
+    ## Run APP
     app.run(host='0.0.0.0')

@@ -10,11 +10,11 @@ deactivate
 
 
 ### Run without GCP APM
-docker rm -f backy && docker build -t back-end . && docker run --name backy -d -p 5000:5000 back-end
+docker build -t back-end . && docker run --name backy -d -p 5000:5000 back-end
 docker rm -f backy
 
 ### Run with GCP APM
-docker rm -f backy && docker build -t back-end . && docker run --name backy -d -p 5000:5000 -e "gcp_project=ricks-sandbox" -e "GOOGLE_APPLICATION_CREDENTIALS=/home/rgreaves/key.json" -v /home/rgreaves:/home/rgreaves back-end
+docker build -t back-end . && docker run --name backy -d -p 5000:5000 -e "gcp_project=ricks-sandbox" -e "GOOGLE_APPLICATION_CREDENTIALS=/home/rgreaves/key.json" -v /home/rgreaves:/home/rgreaves back-end
 docker rm -f backy
 
 #### REDIS
