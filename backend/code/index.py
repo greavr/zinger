@@ -99,9 +99,6 @@ def ping():
 def default():
     return render_template('default.html')
 
-
-
-
 ########################## CORE APIs
 # Add Joke
 @app.route("/api/v1/add", methods=['POST'])
@@ -240,7 +237,7 @@ def removeJoke():
         # End Trace
         if traceEnabled : tracer.end_span()
 
-        return Response("Error: zinger_id provided does not exist", status=400, mimetype='text/html')
+        return Response("Error: zinger_id provided does not exist", status=404, mimetype='text/html')
 
     # Mark zinger as inactive
     r.hset(zinger_id,"flags", "inactive")
