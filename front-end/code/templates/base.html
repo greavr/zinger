@@ -2,28 +2,223 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <!-- CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.3.7/dist/css/uikit.min.css" />
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='mystyle.css') }}">
+
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/uikit@3.3.7/dist/js/uikit.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/uikit@3.3.7/dist/js/uikit-icons.min.js"></script>
+  <script src="uikit/dist/js/uikit-icons.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
-<body>
-  <div id="header">
-    <h1>Zingers</h1>
+
+{% set navigation_bar = [
+('/', 'Home', 'home'),
+('#customize', 'Customize', 'thumbnails'),
+('/new', 'New', 'mail'),
+('/update', 'Update', 'bell'),
+('/admin', 'Admin', 'cog'),
+('/search', 'Search', 'search'),
+('/about', 'About', 'list'),
+('/user', 'User', 'user')
+] -%}
+
+{% set primary_color_selection = [
+['#fff', '#F8F9FA', '#F1F3F4'],
+['#202124', '#2e2f31', 'black']
+] -%}
+
+{% set secondary_color_selection = [
+('#D2E3FC', '#4285F4'),
+('#FAD2CF', '#EA4335'),
+('#FEEFC3', '#FBBC04'),
+('#CEEAD6', '#34AB53')
+] -%}
+
+{% set active_page = active_page|default('Home') -%}
+
+
+<body {% if dark_mode %} class="uk-light" {% endif %}>
+<div class="uk-grid-collapse" uk-grid>
+  <div class="uk-width-1-6">
+    <div class="tm-sidebar-left uk-visible@m">
+      <h1 class="uk-nav-header uk-text-bold">Zinger</h1>
+      <ul class="uk-nav uk-nav-default">
+        {% for href, title, icon in navigation_bar %}
+            <li {% if title == active_page %} class="uk-active" {% endif
+              %}>
+              {% if href[0] == '#' %}
+              <a href="{{ href|e }}" uk-toggle="target: {{ href|e }}">
+                <span class="icon-link">
+                  <span class="uk-margin-small-right" uk-icon="icon: {{ icon|e }}"></span> {{ title|e }}
+                </span>
+              </a>
+              {% else %}
+              <a href="{{ href|e }}">
+                <span class="icon-link">
+                  <span class="uk-margin-small-right" uk-icon="icon: {{ icon|e }}"></span> {{ title|e }}
+                </span>
+              </a>
+              {% endif %}
+
+            </li>
+        {% endfor %}
+      </ul>
+
+    </div>
+    <div class="tm-sidebar-left uk-hidden@m">
+      <h1 class="uk-nav-header uk-text-bold">Zin<br>ger</h1>
+      <ul class="uk-nav uk-nav-default">
+        {% for href, title, icon in navigation_bar %}
+        <li {% if title == active_page %} class="uk-active" {% endif
+            %}>
+          <a class="uk-icon-button uk-icon icon-link-small"
+             uk-icon="icon: {{ icon|e }}"
+             href="{{ href|e }}" uk-tooltip="title: {{ title|e }}; pos: right">
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+
+    </div>
   </div>
+  <div class="uk-width-expand">
   <div class="timeline">
+    <div uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky;">
+      <nav class="uk-navbar-container top-nav" uk-navbar style="position: relative; z-index: 980;">
+        <div class="uk-navbar-left">
+
+          <div class="uk-navbar-item">
+            <h4><a class="uk-link-reset uk-text-bold" href="#" >HOME</a></h4>
+          </div>
+
+        </div>
+      </nav>
+    </div>
+    <div id="customize" uk-modal="">
+      <div class="uk-modal-dialog uk-modal-body">
+        <button class="uk-modal-close-default" type="button" uk-close=""></button>
+        <h2 class="uk-modal-title">Default</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      </div>
+    </div>
+
     {% block content %}
 
     {% endblock %}
   </div>
-  <div class="addjoke-container">
-    <div class="addjoke header"><h3>Add Joke<h3></div>
-    <div class="addjoke sidebar"><h4>Tags</h4></div>
-    <div class="addjoke content"><h4>Joke></h4>
-      Title: <br />
-      Body:
-    </div>
-    <div class="addjoke footer">Submit</div>
   </div>
+  <div class="addjoke-container uk-width-1-3 uk-visible@m">
+    <nav class="uk-navbar-container" uk-navbar uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky;">
+      <div class="uk-navbar-left uk-margin-left uk-margin-right uk-margin-top uk-margin-bottom uk-width-1-1">
+
+        <div class="uk-navbar-item uk-dark uk-width-1-1">
+
+          <form class="uk-search uk-search-navbar uk-width-1-1">
+
+            <span uk-search-icon></span>
+            <input class="uk-search-input" type="search" placeholder="Search...">
+          </form>
+
+        </div>
+
+      </div>
+    </nav>
+    <div class="sidebar">
+      <div class="sidebar-inner">
+        <div class="uk-card uk-card-default uk-margin-small uk-margin-left uk-margin-right uk-border-rounded">
+          <table class="uk-table uk-table-hover uk-table-divider uk-margin-remove-bottom">
+            <thead>
+            <tr>
+              <th><h1 class="uk-nav-header uk-text-bold uk-margin-remove-bottom">Title</h1></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>
+                <dt>Description term</dt>
+                <dd>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</dd>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <dt>Description term</dt>
+                <dd>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</dd>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <dt>Description term</dt>
+                <dd>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</dd>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <div class="uk-card-footer" style="cursor: pointer">
+            <p>Show more</p>
+          </div>
+        </div>
+        <div class="uk-card uk-card-default uk-margin-small uk-margin-left uk-margin-right uk-border-rounded">
+          <table class="uk-table uk-table-hover uk-table-divider uk-margin-remove-bottom">
+            <thead>
+            <tr>
+              <th><h3 class="uk-nav-header uk-text-bold uk-margin-remove-bottom">Title</h3></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>
+                <dt>Description term</dt>
+                <dd>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</dd>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <dt>Description term</dt>
+                <dd>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</dd>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <dt>Description term</dt>
+                <dd>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</dd>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <div class="uk-card-footer" style="cursor: pointer">
+            <p>Show more</p>
+          </div>
+        </div>
+        <div class="uk-padding">
+            <p>Terms
+              Privacy policy
+              Cookies
+              Ads info
+              More
+              © 2020 Zinger</p>
+        </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="{{ url_for('static', filename='simple-sticky-sidebar.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+{% if dark_mode %}
+<script type="text/javascript">
+
+  console.log(true)
+  setDarkMode(['{{ primary_color_selection[1][0] }}','{{ primary_color_selection[1][1] }}','{{ primary_color_selection[1][2] }}'])
+</script>
+{% else %}
+<script type="text/javascript">
+  console.log(false)
+  setDarkMode(['{{ primary_color_selection[0][0] }}','{{ primary_color_selection[0][1] }}','{{ primary_color_selection[0][2] }}'])
+</script>
+{% endif %}
 
 </body>
 </html>

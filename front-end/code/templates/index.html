@@ -1,21 +1,177 @@
 {% extends 'base.html' %}
 
+{% set active_page = 'Home' -%}
+
 {% block content %}
+<div class="entry-box uk-card uk-card-default uk-card-small uk-card-body bigger-bottom">
+    <div class="uk-grid-small" uk-grid>
+        <div class="uk-width-auto">
+<!--            <img class="uk-border-circle" width="40" height="40" src="images/avatar.jpg">-->
+            <span class="uk-icon" uk-icon="icon:user"></span>
+        </div>
+        <div class="uk-width-expand">
+            <div class="">
+                <div class="uk-margin">
+                    <textarea id="status" class="uk-textarea" rows="1" onkeyup="textareaIncrease()" placeholder="What's Happening ..."></textarea>
+                </div>
+            </div>
+            <div class="uk-grid-large uk-child-width-expand@s" uk-grid>
+                <div class="box c">333  <a href="#" uk-icon="happy"></a></div>
+                <div></div>
+                <div class="box b uk-text-right"><button class="uk-button uk-button-primary">Submit</button></div>
+            </div>
 
-    {% for aZinger in Zingers %}
-    <div class="container {{ loop.cycle('left', 'right') }}">
-    <div class="content">
-    <div class="wrapper">
-      <div class="box a">
-        <h3>{{ aZinger.setup }}</h3>
-        <p>{{ aZinger.body }} </p>
-      </div>
-      <div class="box c">{{ aZinger.votes }}  <img width=25px height=25px src="{{ url_for('static', filename='laugh.jpeg') }}" /></div>
-      <div class="box b">{{ aTag }}</div>
-
+        </div>
     </div>
-  </div>
-  </div>
+</div>
+    {% for aZinger in Zingers %}
+    <div class="uk-card uk-card-default uk-card-small uk-card-body">
+        <div class="uk-grid-small" uk-grid>
+            <div class="uk-width-auto">
+<!--                <img class="uk-border-circle" width="40" height="40" src="images/avatar.jpg">-->
+                <span class="uk-icon" uk-icon="icon:user"></span>
+            </div>
+            <div class="uk-width-expand">
+                <div class="">
+                    <p class="uk-margin-remove-bottom"> <h4><a class="uk-link-reset uk-text-bold" href="#" >{{ aZinger.setup }}</a></h4>- 10m</p>
+                </div>
+                <p>{{ aZinger.body }}</p>
+                <div class="box c">{{ aZinger.votes }}  <a href="#" uk-icon="happy"></a></div>
+                <div class="box b">{{ aTag }}</div>
+            </div>
+        </div>
+    </div>
     {% endfor %}
+<div class="uk-card uk-card-default uk-card-small uk-card-body">
+    <div class="uk-grid-small" uk-grid>
+        <div class="uk-width-auto">
+<!--            <img class="uk-border-circle" width="40" height="40" src="images/avatar.jpg">-->
+            <span class="uk-icon" uk-icon="icon:user"></span>
+        </div>
+        <div class="uk-width-expand">
+            <div class="">
+                <p class="uk-margin-remove-bottom"> <h4 style="display:inline;"><a class="uk-link-reset uk-text-bold" href="#" >Name</a></h4> - 10m</p>
+            </div>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
 
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt</p>
+
+            <div class="box c">333  <a href="#" uk-icon="happy"></a></div>
+            <div class="box b">as</div>
+        </div>
+    </div>
+</div>
+<div class="uk-card uk-card-default uk-card-small uk-card-body">
+    <div class="uk-grid-small " uk-grid>
+        <div class="uk-width-auto">
+<!--            <img class="uk-border-circle" width="40" height="40" src="images/avatar.jpg">-->
+            <span class="uk-icon" uk-icon="icon:user"></span>
+        </div>
+        <div class="uk-width-expand">
+            <div class="">
+                <p class="uk-margin-remove-bottom"> <h4 style="display:inline;"><a class="uk-link-reset uk-text-bold" href="#" >Name</a></h4> - 10m</p>
+            </div>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
+
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt</p>
+            <div class="box c">333  <a href="#" uk-icon="happy"></a></div>
+            <div class="box b">as</div>
+        </div>
+    </div>
+</div>
+
+<div class="uk-card uk-card-default uk-card-small uk-card-body">
+    <div class="uk-grid-small " uk-grid>
+        <div class="uk-width-auto">
+<!--            <img class="uk-border-circle" width="40" height="40" src="images/avatar.jpg">-->
+            <span class="uk-icon" uk-icon="icon:user"></span>
+        </div>
+        <div class="uk-width-expand">
+            <div class="">
+                <p class="uk-margin-remove-bottom"> <h4 style="display:inline;"><a class="uk-link-reset uk-text-bold" href="#" >Name</a></h4> - 10m</p>
+            </div>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
+
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt</p>
+            <div class="box c">333  <a href="#" uk-icon="happy"></a></div>
+            <div class="box b">as</div>
+        </div>
+    </div>
+</div>
+
+<div class="uk-card uk-card-default uk-card-small uk-card-body">
+    <div class="uk-grid-small " uk-grid>
+        <div class="uk-width-auto">
+<!--            <img class="uk-border-circle" width="40" height="40" src="images/avatar.jpg">-->
+            <span class="uk-icon" uk-icon="icon:user"></span>
+        </div>
+        <div class="uk-width-expand">
+            <div class="">
+                <p class="uk-margin-remove-bottom"> <h4 style="display:inline;"><a class="uk-link-reset uk-text-bold" href="#" >Name</a></h4> - 10m</p>
+            </div>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
+
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt</p>
+            <div class="box c">333  <a href="#" uk-icon="happy"></a></div>
+            <div class="box b">as</div>
+        </div>
+    </div>
+</div>
+
+<div class="uk-card uk-card-default uk-card-small uk-card-body">
+    <div class="uk-grid-small " uk-grid>
+        <div class="uk-width-auto">
+<!--            <img class="uk-border-circle" width="40" height="40" src="images/avatar.jpg">-->
+            <span class="uk-icon" uk-icon="icon:user"></span>
+        </div>
+        <div class="uk-width-expand">
+            <div class="">
+                <p class="uk-margin-remove-bottom"> <h4 style="display:inline;"><a class="uk-link-reset uk-text-bold" href="#" >Name</a></h4> - 10m</p>
+            </div>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
+
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt</p>
+            <div class="box c">333  <a href="#" uk-icon="happy"></a></div>
+            <div class="box b">as</div>
+        </div>
+    </div>
+</div>
+
+<div class="uk-card uk-card-default uk-card-small uk-card-body">
+    <div class="uk-grid-small " uk-grid>
+        <div class="uk-width-auto">
+<!--            <img class="uk-border-circle" width="40" height="40" src="images/avatar.jpg">-->
+            <span class="uk-icon" uk-icon="icon:user"></span>
+        </div>
+        <div class="uk-width-expand">
+            <div class="">
+                <p class="uk-margin-remove-bottom"> <h4 style="display:inline;"><a class="uk-link-reset uk-text-bold" href="#" >Name</a></h4> - 10m</p>
+            </div>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
+
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt</p>
+            <div class="box c">333  <a href="#" uk-icon="happy"></a></div>
+            <div class="box b">as</div>
+        </div>
+    </div>
+</div>
+
+<div class="uk-card uk-card-default uk-card-small uk-card-body">
+    <div class="uk-grid-small " uk-grid>
+        <div class="uk-width-auto">
+<!--            <img class="uk-border-circle" width="40" height="40" src="images/avatar.jpg">-->
+            <span class="uk-icon" uk-icon="icon:user"></span>
+        </div>
+        <div class="uk-width-expand">
+            <div class="">
+                <p class="uk-margin-remove-bottom"> <h4 style="display:inline;"><a class="uk-link-reset uk-text-bold" href="#" >Name</a></h4> - 10m</p>
+            </div>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
+
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt</p>
+            <div class="box c">333  <a href="#" uk-icon="happy"></a></div>
+            <div class="box b">as</div>
+        </div>
+    </div>
+</div>
 {% endblock %}

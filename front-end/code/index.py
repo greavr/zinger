@@ -16,7 +16,8 @@ profiler=False
 backend="http://0.0.0.0:5000/"
 
 # Global Variables
-
+dark_mode=False
+color_selection=1
 
 ##############
 # Custom Functions
@@ -181,14 +182,15 @@ def ready():
 ## Default pages
 @app.route("/", methods=['GET'])
 def default():
+    global dark_mode, color_selection
     ## Populate latest list of Zingers
     ZingerList = GetZingers()
     if ZingerList != []:
         for aZinger in ZingerList:
             print (aZinger["body"])
-        return render_template('index.html', Zingers=ZingerList)
+        return render_template('index.html', Zingers=ZingerList, dark_mode=dark_mode, color_selection=color_selection)
     else:
-        return render_template('index.html', Zingers={})
+        return render_template('index.html', Zingers={}, dark_mode=dark_mode, color_selection=color_selection)
 
 @app.route('/edit/<string:id>', methods=["POST"])
 def task(id):
